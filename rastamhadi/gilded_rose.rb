@@ -35,7 +35,7 @@ end
 class ItemWrapper
   extend Forwardable
 
-  delegate %i[name sell_in quality sell_in=] => :@item
+  delegate %i[sell_in quality] => :@item
 
   def self.wrap(item)
     case item.name
