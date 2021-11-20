@@ -11,12 +11,7 @@ class GildedRose
     @items.each do |item|
       item.update_quality
       item.decrement_sell_in
-      if item.sell_in.negative?
-        item.adjust_quality
-        if item.name == 'Aged Brie' && item.quality < 50
-          item.quality = item.quality + 1
-        end
-      end
+      item.adjust_quality if item.sell_in.negative?
     end
   end
 end
@@ -66,6 +61,10 @@ end
 
 class AgedBrie < ItemWrapper
   def update_quality
+    @item.quality += 1 if @item.quality < 50
+  end
+
+  def adjust_quality
     @item.quality += 1 if @item.quality < 50
   end
 end
