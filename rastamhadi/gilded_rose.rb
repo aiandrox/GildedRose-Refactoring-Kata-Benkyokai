@@ -11,7 +11,7 @@ class GildedRose
     @items.each do |item|
       item.update_quality
       item.decrement_sell_in
-      item.adjust_quality if item.sell_in.negative?
+      item.adjust_quality if item.passed_sell_by_date?
     end
   end
 end
@@ -57,6 +57,10 @@ class ItemWrapper
   end
 
   def adjust_quality; end
+
+  def passed_sell_by_date?
+    @item.sell_in.negative?
+  end
 
   def quality=(quality)
     @item.quality = quality.clamp(0..50)
