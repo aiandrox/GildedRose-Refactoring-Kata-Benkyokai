@@ -59,27 +59,25 @@ class ItemWrapper
   def adjust_quality; end
 
   def quality=(quality)
-    @item.quality = quality.clamp(0..)
+    @item.quality = quality.clamp(0..50)
   end
 end
 
 class AgedBrie < ItemWrapper
   def update_quality
-    self.quality += 1 if quality < 50
+    self.quality += 1
   end
 
   def adjust_quality
-    self.quality += 1 if quality < 50
+    self.quality += 1
   end
 end
 
 class BackstagePasses < ItemWrapper
   def update_quality
-    return unless quality < 50
-
     self.quality += 1
-    self.quality += 1 if sell_in < 11 && quality < 50
-    self.quality += 1 if sell_in < 6 && quality < 50
+    self.quality += 1 if sell_in < 11
+    self.quality += 1 if sell_in < 6
   end
 
   def adjust_quality
