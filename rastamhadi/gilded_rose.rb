@@ -10,7 +10,7 @@ class GildedRose
   def update_quality
     @items.each do |item|
       item.update_quality
-      item.sell_in = item.sell_in - 1 if item.name != 'Sulfuras, Hand of Ragnaros'
+      item.decrement_sell_in
       if item.sell_in.negative?
         if item.name != 'Aged Brie'
           if item.name != 'Backstage passes to a TAFKAL80ETC concert'
@@ -61,6 +61,10 @@ class ItemWrapper
   end
 
   def update_quality; end
+
+  def decrement_sell_in
+    @item.sell_in -= 1
+  end
 end
 
 class AgedBrie < ItemWrapper
@@ -80,6 +84,7 @@ class BackstagePasses < ItemWrapper
 end
 
 class Sulfuras < ItemWrapper
+  def decrement_sell_in; end
 end
 
 class Other < ItemWrapper
