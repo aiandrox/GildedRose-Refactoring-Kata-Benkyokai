@@ -12,10 +12,9 @@ class GildedRose
       item.update_quality
       item.decrement_sell_in
       if item.sell_in.negative?
+        item.adjust_quality
         if item.name != 'Aged Brie'
-          if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-            item.quality = item.quality - 1 if item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
-          else
+          if item.name == 'Backstage passes to a TAFKAL80ETC concert'
             item.quality = item.quality - item.quality
           end
         elsif item.quality < 50
@@ -65,6 +64,8 @@ class ItemWrapper
   def decrement_sell_in
     @item.sell_in -= 1
   end
+
+  def adjust_quality; end
 end
 
 class AgedBrie < ItemWrapper
@@ -89,6 +90,10 @@ end
 
 class Other < ItemWrapper
   def update_quality
+    @item.quality -= 1 if @item.quality.positive?
+  end
+
+  def adjust_quality
     @item.quality -= 1 if @item.quality.positive?
   end
 end
