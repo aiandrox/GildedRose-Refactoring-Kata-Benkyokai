@@ -2,7 +2,9 @@
 
 class GildedRose
   def initialize(items)
-    @items = items
+    @items = items.map do |item|
+      ItemWrapper.wrap(item)
+    end
   end
 
   def update_quality
@@ -47,3 +49,34 @@ class Item
   end
 end
 # :nocov:
+
+class ItemWrapper
+  extend Forwardable
+
+  delegate %i[name sell_in quality sell_in= quality=] => :@item
+
+  def self.wrap(item)
+    case item.name
+    when 'Aged Brie' then AgedBrie.new(item)
+    when 'Backstage passes to a TAFKAL80ETC concert' then BackstagePasses.new(item)
+    when 'Sulfuras, Hand of Ragnaros' then Sulfuras.new(item)
+    else Other.new(item)
+    end
+  end
+
+  def initialize(item)
+    @item = item
+  end
+end
+
+class AgedBrie < ItemWrapper
+end
+
+class BackstagePasses < ItemWrapper
+end
+
+class Sulfuras < ItemWrapper
+end
+
+class Other < ItemWrapper
+end
