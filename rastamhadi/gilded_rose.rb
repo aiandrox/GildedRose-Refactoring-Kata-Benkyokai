@@ -53,6 +53,7 @@ class GildedRose
   end
 end
 
+# :nocov:
 class Item
   attr_accessor :name, :sell_in, :quality
 
@@ -66,3 +67,4 @@ class Item
     "#{@name}, #{@sell_in}, #{@quality}"
   end
 end
+# :nocov:
