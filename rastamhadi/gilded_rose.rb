@@ -35,7 +35,7 @@ end
 class ItemWrapper
   extend Forwardable
 
-  delegate %i[name sell_in quality sell_in= quality=] => :@item
+  delegate %i[name sell_in quality sell_in=] => :@item
 
   def self.wrap(item)
     case item.name
@@ -57,29 +57,33 @@ class ItemWrapper
   end
 
   def adjust_quality; end
+
+  def quality=(quality)
+    @item.quality = quality.clamp(0..)
+  end
 end
 
 class AgedBrie < ItemWrapper
   def update_quality
-    @item.quality += 1 if @item.quality < 50
+    self.quality += 1 if quality < 50
   end
 
   def adjust_quality
-    @item.quality += 1 if @item.quality < 50
+    self.quality += 1 if quality < 50
   end
 end
 
 class BackstagePasses < ItemWrapper
   def update_quality
-    return unless @item.quality < 50
+    return unless quality < 50
 
-    @item.quality += 1
-    @item.quality += 1 if @item.sell_in < 11 && @item.quality < 50
-    @item.quality += 1 if @item.sell_in < 6 && @item.quality < 50
+    self.quality += 1
+    self.quality += 1 if sell_in < 11 && quality < 50
+    self.quality += 1 if sell_in < 6 && quality < 50
   end
 
   def adjust_quality
-    @item.quality = 0
+    self.quality = 0
   end
 end
 
@@ -89,10 +93,10 @@ end
 
 class Other < ItemWrapper
   def update_quality
-    @item.quality -= 1 if @item.quality.positive?
+    self.quality -= 1
   end
 
   def adjust_quality
-    @item.quality -= 1 if @item.quality.positive?
+    self.quality -= 1
   end
 end
